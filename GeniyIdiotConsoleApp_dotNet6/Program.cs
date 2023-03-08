@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Xml.Serialization;
 using System.IO;
+using System.Xml.Linq;
 
 namespace GeniyIdiotConsoleApp_dotNet6
 {
@@ -76,6 +77,7 @@ namespace GeniyIdiotConsoleApp_dotNet6
                 }
                 Console.WriteLine(username + ", " + "Ваш диагноз: " + GetDiagnoses(correctAnswersCount, questionsCount));
                 Result result = new Result(username, correctAnswersCount, GetDiagnoses(correctAnswersCount, questionsCount));
+               
                 Console.WriteLine("Хотите пройти заново? Y/N");
 
                 string userAgreement = Console.ReadLine().ToUpper();
@@ -83,7 +85,8 @@ namespace GeniyIdiotConsoleApp_dotNet6
                 {
                     userAgreedToContinue = false;
                 }
-                AddRecord(result);
+                AddResult(result);
+                PrintTableWithResults();
             }
         }
 
@@ -148,31 +151,59 @@ namespace GeniyIdiotConsoleApp_dotNet6
             return diagnosis;
         }
 
-        static void AddRecord(Result result)
+        static async void AddResult(Result result)
         {
-            
-
-            XmlSerializer serializer = new(typeof(Result));
-            using (FileStream fileStream = new("Results_2.xml", FileMode.Append))
+            string filename = "results.txt";
+            string data = $"{result.Name},{result.CorrectAnswersCount},{result.Diagnosis};";
+            if (File.Exists(filename))
             {
-                serializer.Serialize(fileStream, result);
+                try
+                {
+                    await File.AppendAllTextAsync(filename, data);
+                }
+                catch (IOException)
+                {
+                    Console.WriteLine("Couldn't write your result to file");
+                }
+            }
+            else
+            {
+                File.Create(filename).Close();
             }
         }
-
-        static void PrintTableWithResults()
+        static async void PrintTableWithResults()
         {
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Result>));
-            string fileName = "Results.xml";
-            List<Result> results = new List<Result>();
-
-            using (FileStream fs = new FileStream(fileName, FileMode.Open))
+            string result = "";
+            
+            string fileName = "results.txt";
+            try
             {
-                results = xmlSerializer.Deserialize(fs) as List<Result>;
+                result = await File.ReadAllTextAsync(fileName);
             }
-            foreach(var result in results)
+            catch (FileNotFoundException)
             {
-                Console.WriteLine(result.ToString());
+                Console.WriteLine("There are no results");
             }
+            string[] resultsArray = result.Split(";", StringSplitOptions.RemoveEmptyEntries);
+            int longestString = resultsArray.Max(x => x.Length);
+            foreach (var res in resultsArray)
+            {
+                string[] data = res.Split(",");
+                Result resultToPrint = new Result(data[0], int.Parse(data[1]), data[2]);
+                Console.WriteLine(resultToPrint.ToString());
+                
+                Console.WriteLine(PrintTableLine(longestString));
+            }
+        }
+        static string PrintTableLine(int length)
+        {
+            int size = length + 8;
+            StringBuilder line = new StringBuilder();
+            for (int i = 0; i < size; i++)
+            {
+                line.Append("-");
+            }
+            return line.ToString();
         }
         
     }
