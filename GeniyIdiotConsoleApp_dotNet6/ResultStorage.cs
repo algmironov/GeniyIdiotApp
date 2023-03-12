@@ -51,6 +51,7 @@ namespace GeniyIdiotConsoleApp_dotNet6
 
                 Console.WriteLine(PrintTableLine(longestString));
             }
+
         }
         static string PrintTableLine(int length)
         {
