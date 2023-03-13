@@ -8,7 +8,8 @@ namespace GeniyIdiotConsoleApp_dotNet6
 {
     internal class DiagnosisStorage
     {
-        public static List<Diagnosis> diagnoses= new List<Diagnosis>();
+        public static HashSet<Diagnosis> diagnoses= new HashSet<Diagnosis>();
+        static string filename = "diagnoses.txt";
 
         public static void AddDiagnosis(Diagnosis diagnosis)
         {
@@ -17,6 +18,8 @@ namespace GeniyIdiotConsoleApp_dotNet6
 
         public static string GetDiagnosisByResult(int correctAnswersCount)
         {
+            LoadAllDiagnoses();
+
             foreach (var diagnosis in diagnoses)
             {
                 if (correctAnswersCount > diagnosis.Min && correctAnswersCount < diagnosis.Max)
@@ -25,6 +28,17 @@ namespace GeniyIdiotConsoleApp_dotNet6
                 }
             }
             return "";
+        }
+
+        private static void LoadAllDiagnoses()
+        {
+            string[] allDiagnoses = DataDealer.GetData(filename).Split("||", StringSplitOptions.RemoveEmptyEntries);
+            foreach (var str in allDiagnoses)
+            {
+                string[] diag = str.Split(",");
+                Diagnosis diagnosis = new Diagnosis(diag[0], int.Parse(diag[1]), int.Parse(diag[2]));
+                diagnoses.Add(diagnosis);
+            }
         }
     }
 }
