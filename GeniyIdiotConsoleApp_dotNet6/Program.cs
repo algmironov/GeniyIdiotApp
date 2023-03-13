@@ -1,9 +1,4 @@
-﻿
-using System.Text;
-
-
-
-
+﻿using System.Text;
 
 namespace GeniyIdiotConsoleApp_dotNet6
 {

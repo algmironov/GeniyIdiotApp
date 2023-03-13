@@ -89,10 +89,11 @@ namespace GeniyIdiotConsoleApp_dotNet6
         public static void DeleteQuestion()
         {
             var deletingQuestion = true;
-            var wishToContinueDeleting = true;
+           
             PrintQuestionsListToDelete();
             while (deletingQuestion)
             {
+                var wishToContinueDeleting = true;
                 Console.WriteLine("Введите номер вопроса, который хотите удалить: ");
                 try
                 {
@@ -104,18 +105,30 @@ namespace GeniyIdiotConsoleApp_dotNet6
                 }
                 catch (FormatException)
                 {
-                    Console.WriteLine("произошла ошибка, введите корректный номер вопроса!");
+                    Console.WriteLine("Произошла ошибка, введите корректный номер вопроса!");
                 }
-                Console.WriteLine("Хотите удалить еще один вопрос?\nВведите Да/Нет");
+                catch (IndexOutOfRangeException)
+                {
+                    Console.WriteLine("Вы ввели некорректный номер, попробуйте еще раз!");
+                 }
+                
 
                 while (wishToContinueDeleting)
                 {
+                    deletingQuestion = false;
+                    Console.WriteLine("Хотите удалить еще один вопрос?\nВведите Да/Нет");
                     string answer = Console.ReadLine().ToLower();
-                    if (answer.Equals("нет") && answer.Equals("да")){
+                    if (answer.Equals("нет") || answer.Equals("да")){
                         if (answer.Equals("нет"))
                         {
                             wishToContinueDeleting = false;
                             deletingQuestion = false;
+                        }
+                        else
+                        {
+                            deletingQuestion= true;
+                            wishToContinueDeleting = false;
+                            PrintQuestionsListToDelete();
                         }
                     }
                     else

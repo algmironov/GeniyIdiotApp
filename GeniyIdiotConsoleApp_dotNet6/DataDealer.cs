@@ -65,6 +65,7 @@ namespace GeniyIdiotConsoleApp_dotNet6
                 reader.Close();
                 string result = sb.ToString().Replace(data, "");
                 var newData = result.Split("||", StringSplitOptions.RemoveEmptyEntries);
+                File.WriteAllText(filename, string.Empty, Encoding.UTF8);
                 File.AppendAllLines(filename, newData);
                 return true;
             }
