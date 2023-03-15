@@ -1,26 +1,27 @@
-﻿using System;
+﻿using GeniyIdiotApp.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeniyIdiotConsoleApp_dotNet6
+namespace GeniyIdiotApp.Common
 {
-    internal class QuestionsStorage
+    public class QuestionsStorage
     {
         static HashSet<Question> questions = new HashSet<Question>();
         static Dictionary<int, Question> questionsList = new Dictionary<int, Question>();
-        static string filename = "questions.txt";
+        static string filename = $@"{Directory.GetCurrentDirectory()}/resources/questions.txt";
 
         public static void addQuestion(Question question)
         {
             questions.Add(question);
-            _ = DataDealer.SaveData("questions.txt", question.Text + "#" + question.Answer);
+            _ = DataDealer.SaveData(filename, question.Text + "#" + question.Answer);
         }
 
         public static void removeQuestion(Question question)
         {
-            if(DataDealer.RemoveData("questions.txt", question.Text + "#" + question.Answer))
+            if(DataDealer.RemoveData(filename, question.Text + "#" + question.Answer))
             {
                 questions.Remove(question);
             }
@@ -84,6 +85,11 @@ namespace GeniyIdiotConsoleApp_dotNet6
                 }
             }
 
+        }
+
+        public static void RemoveQuestion(Question question)
+        {
+            DataDealer.RemoveData(filename, $"{question.Text}#{question.Answer}");
         }
 
         public static void DeleteQuestion()
@@ -154,6 +160,23 @@ namespace GeniyIdiotConsoleApp_dotNet6
                 Console.WriteLine($"{position}) {question.Text}");
                 position++;
             }
+        }
+
+        internal static List<string> FirstCall()
+        {
+            List<string> questions = new List<string>();
+            questions.Add("Сколько будет два плюс два умноженное на два?#6");
+            questions.Add("Бревно нужно распилить на 10 частей. Сколько распилов нужно сделать?#9");
+            questions.Add("На двух руках 10 пальцев. Сколько пальцев на 5 руках?#25");
+            questions.Add("Укол делают каждые полчаса. Сколько нужно минут, чтобы сделать три укола?#60");
+            questions.Add("Пять свечей горело, две потухли. Сколько свечей осталось?#2");
+            questions.Add("Сколько башен в Московском Кремле?#20");
+            questions.Add("Сколько в одном байте бит?#8");
+            questions.Add("Сколько в одном Терабайте Гигабайт?#1024");
+            questions.Add("В каком году Ю. А. Гагарин впервые полетел в Космос?#1961");
+            questions.Add("Сколько колес в легковом автомобиле?#6");
+            questions.Add("Сколько в одном килограмме грамм?#1000");
+            return questions;
         }
     }
 }

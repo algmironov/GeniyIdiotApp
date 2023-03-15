@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using GeniyIdiotApp.Common;
 
 namespace GeniyIdiotConsoleApp_dotNet6
 {
@@ -142,8 +143,8 @@ namespace GeniyIdiotConsoleApp_dotNet6
                         correctAnswersCount++;
                     }
                 }
-                int resultPersentage = (correctAnswersCount * 100 )/ askedQuestions.Count;
-                string userDiagnosis = DiagnosisStorage.GetDiagnosisByResult(resultPersentage);
+               
+                string userDiagnosis = DiagnosisStorage.GetDiagnosisByResult(correctAnswersCount, askedQuestions.Count);
                 Console.WriteLine(username + ", " + "Ваш диагноз: " + userDiagnosis);
                 Result result = new Result(username, correctAnswersCount, userDiagnosis);
 

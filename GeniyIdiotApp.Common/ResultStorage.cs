@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeniyIdiotConsoleApp_dotNet6
+namespace GeniyIdiotApp.Common
 {
-    internal class ResultStorage
+    public class ResultStorage
     {
-       public static async void AddResult(Result result)
+       static string filename = $@"{Directory.GetCurrentDirectory()}/resources/results.txt";
+        public static async void AddResult(Result result)
         {
-            string filename = "results.txt";
+            
             string data = $"{result.Name},{result.CorrectAnswersCount},{result.Diagnosis};";
             if (File.Exists(filename))
             {
@@ -32,10 +33,9 @@ namespace GeniyIdiotConsoleApp_dotNet6
         {
             string result = "";
 
-            string fileName = "results.txt";
             try
             {
-                result = await File.ReadAllTextAsync(fileName);
+                result = await File.ReadAllTextAsync(filename);
             }
             catch (FileNotFoundException)
             {
@@ -52,6 +52,25 @@ namespace GeniyIdiotConsoleApp_dotNet6
                 Console.WriteLine(PrintTableLine(longestString));
             }
 
+        }
+
+        public static List<List<string>> GetAllResults()
+        {
+            List<string> preResults = new List<string>();
+            List<List<string>> results = new List<List<string>>();
+             var resultsString = DataDealer.GetData(filename);
+            if (!string.IsNullOrEmpty(resultsString))
+            {
+                preResults = resultsString.Remove(resultsString.Length - 2).Split(";", StringSplitOptions.RemoveEmptyEntries).ToList();
+                foreach (var res in preResults)
+                {
+                    List<string> elem = res.Split(',').ToList();
+                    results.Add(elem);
+                }
+                return results;
+            }
+            
+            return results;
         }
         static string PrintTableLine(int length)
         {
