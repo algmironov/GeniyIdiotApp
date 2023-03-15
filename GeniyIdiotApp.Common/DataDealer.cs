@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeniyIdiotConsoleApp_dotNet6
+namespace GeniyIdiotApp.Common
 {
-    internal class DataDealer
+    public class DataDealer
     {
         public static bool SaveData(string filename, string data)
         {
@@ -25,7 +25,7 @@ namespace GeniyIdiotConsoleApp_dotNet6
                 writer.Close();
                 return true;
             }
-            
+
         }
 
         public static string GetData(string filename)
@@ -76,7 +76,40 @@ namespace GeniyIdiotConsoleApp_dotNet6
             }
         }
 
-       
+        public static async void PrepareFilesOnStart()
+        {
+            string resources = $@"{ Directory.GetCurrentDirectory()}/resources";
+            if (!Directory.Exists(resources))
+            {
+                Directory.CreateDirectory(resources);
+            }
+            
+            string diagnoses = $@"{resources}\diagnoses.txt";
+            string questions = $@"{resources}\questions.txt";
+            string results = $@"{resources}\results.txt";
+            if (!File.Exists(diagnoses))
+            {
+                File.Create(diagnoses).Close();
+                foreach (var diagnose in DiagnosisStorage.FirstCall())
+                {
+                    SaveData(diagnoses, diagnose);
+                }
+            }
+            if (!File.Exists(questions))
+            {
+                File.Create(questions).Close();
+               foreach (var q in QuestionsStorage.FirstCall())
+                    {
+                        SaveData(questions, q);
+                    }
+            }
+            if (!File.Exists(results))
+                {
+                    File.Create(results).Close();
+                }
+        }
+
+
 
     }
 }

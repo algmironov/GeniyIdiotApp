@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GeniyIdiotConsoleApp_dotNet6
+namespace GeniyIdiotApp.Common
 {
-    internal class Diagnosis
+    public class Diagnosis
     {
         public string UserDiagnosis { get; set; }
         public int Min { get; set; }
