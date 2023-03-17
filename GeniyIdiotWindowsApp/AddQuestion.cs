@@ -72,7 +72,7 @@ namespace GeniyIdiotWindowsApp
             }
             catch (FormatException)
             {
-                MessageBox.Show("Ответ должен быть целым числом!","Неверный формат ответа!");
+                MessageBox.Show("Ответ должен быть целым числом!", "Неверный формат ответа!");
             }
 
             if (!textNotAccepted && !answerNotAccepted)

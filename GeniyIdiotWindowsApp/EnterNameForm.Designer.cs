@@ -31,6 +31,7 @@
             sendNameButton = new Button();
             inputUsernameField = new TextBox();
             askingLaber = new Label();
+            exitButton = new Button();
             SuspendLayout();
             // 
             // sendNameButton
@@ -47,11 +48,15 @@
             // 
             // inputUsernameField
             // 
+            inputUsernameField.BackColor = SystemColors.Window;
+            inputUsernameField.BorderStyle = BorderStyle.FixedSingle;
+            inputUsernameField.CausesValidation = false;
+            inputUsernameField.Cursor = Cursors.IBeam;
+            inputUsernameField.HideSelection = false;
             inputUsernameField.Location = new Point(84, 108);
             inputUsernameField.Name = "inputUsernameField";
             inputUsernameField.Size = new Size(148, 23);
             inputUsernameField.TabIndex = 1;
-            inputUsernameField.KeyPress += EnterNameForm_KeyPress;
             // 
             // askingLaber
             // 
@@ -63,12 +68,26 @@
             askingLaber.TabIndex = 2;
             askingLaber.Text = "Введите Ваше имя:";
             // 
+            // exitButton
+            // 
+            exitButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            exitButton.ForeColor = SystemColors.Highlight;
+            exitButton.Location = new Point(94, 205);
+            exitButton.Name = "exitButton";
+            exitButton.Size = new Size(129, 41);
+            exitButton.TabIndex = 3;
+            exitButton.Text = "Выйти";
+            exitButton.UseVisualStyleBackColor = true;
+            exitButton.Click += exitButton_Click;
+            // 
             // EnterNameForm
             // 
+            AcceptButton = sendNameButton;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ButtonHighlight;
-            ClientSize = new Size(329, 316);
+            ClientSize = new Size(329, 279);
+            Controls.Add(exitButton);
             Controls.Add(askingLaber);
             Controls.Add(inputUsernameField);
             Controls.Add(sendNameButton);
@@ -78,7 +97,6 @@
             StartPosition = FormStartPosition.CenterParent;
             Text = "Как Вас зовут?";
             Load += EnterNameForm_Load;
-            KeyPress += EnterNameForm_KeyPress;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -88,5 +106,6 @@
         private Button sendNameButton;
         private TextBox inputUsernameField;
         private Label askingLaber;
+        private Button exitButton;
     }
 }

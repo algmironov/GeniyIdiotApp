@@ -30,14 +30,14 @@
         {
             startGameButton = new Button();
             getResultsButton = new Button();
-            addQuestionButton = new Button();
-            deleteQuestionButton = new Button();
             welcomeLabel = new Label();
+            settingsButton = new Button();
+            exitButton = new Button();
             SuspendLayout();
             // 
             // startGameButton
             // 
-            startGameButton.Location = new Point(331, 154);
+            startGameButton.Location = new Point(224, 167);
             startGameButton.Name = "startGameButton";
             startGameButton.Size = new Size(222, 23);
             startGameButton.TabIndex = 0;
@@ -47,7 +47,7 @@
             // 
             // getResultsButton
             // 
-            getResultsButton.Location = new Point(331, 206);
+            getResultsButton.Location = new Point(224, 196);
             getResultsButton.Name = "getResultsButton";
             getResultsButton.Size = new Size(222, 23);
             getResultsButton.TabIndex = 1;
@@ -55,49 +55,49 @@
             getResultsButton.UseVisualStyleBackColor = true;
             getResultsButton.Click += getResultsButton_Click;
             // 
-            // addQuestionButton
-            // 
-            addQuestionButton.Location = new Point(331, 260);
-            addQuestionButton.Name = "addQuestionButton";
-            addQuestionButton.Size = new Size(222, 23);
-            addQuestionButton.TabIndex = 2;
-            addQuestionButton.Text = "Добавить вопрос";
-            addQuestionButton.UseVisualStyleBackColor = true;
-            addQuestionButton.Click += addQuestionButton_Click;
-            // 
-            // deleteQuestionButton
-            // 
-            deleteQuestionButton.Location = new Point(331, 315);
-            deleteQuestionButton.Name = "deleteQuestionButton";
-            deleteQuestionButton.Size = new Size(222, 23);
-            deleteQuestionButton.TabIndex = 3;
-            deleteQuestionButton.Text = "Удалить вопрос";
-            deleteQuestionButton.UseVisualStyleBackColor = true;
-            deleteQuestionButton.Click += deleteQuestionButton_Click;
-            // 
             // welcomeLabel
             // 
             welcomeLabel.AutoSize = true;
             welcomeLabel.Font = new Font("Verdana", 18F, FontStyle.Bold, GraphicsUnit.Point);
-            welcomeLabel.Location = new Point(164, 83);
+            welcomeLabel.Location = new Point(39, 72);
             welcomeLabel.Name = "welcomeLabel";
-            welcomeLabel.Size = new Size(550, 29);
+            welcomeLabel.Size = new Size(637, 29);
             welcomeLabel.TabIndex = 4;
-            welcomeLabel.Text = "Добро пожаловать в игру Гений Идиот";
+            welcomeLabel.Text = "Добро пожаловать в игру \"Гений или Идиот\"";
+            // 
+            // settingsButton
+            // 
+            settingsButton.Location = new Point(224, 225);
+            settingsButton.Name = "settingsButton";
+            settingsButton.Size = new Size(222, 23);
+            settingsButton.TabIndex = 5;
+            settingsButton.Text = "Настройки";
+            settingsButton.UseVisualStyleBackColor = true;
+            settingsButton.Click += settingsButton_Click;
+            // 
+            // exitButton
+            // 
+            exitButton.Location = new Point(224, 254);
+            exitButton.Name = "exitButton";
+            exitButton.Size = new Size(222, 23);
+            exitButton.TabIndex = 6;
+            exitButton.Text = "Выход";
+            exitButton.UseVisualStyleBackColor = true;
+            exitButton.Click += exitButton_Click;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(947, 514);
+            ClientSize = new Size(696, 345);
+            Controls.Add(exitButton);
+            Controls.Add(settingsButton);
             Controls.Add(welcomeLabel);
-            Controls.Add(deleteQuestionButton);
-            Controls.Add(addQuestionButton);
             Controls.Add(getResultsButton);
             Controls.Add(startGameButton);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Гений Идиот";
+            Text = "Гений или Идиот";
             FormClosed += MainForm_FormClosed;
             Load += Form1_Load;
             ResumeLayout(false);
@@ -108,8 +108,8 @@
 
         private Button startGameButton;
         private Button getResultsButton;
-        private Button addQuestionButton;
-        private Button deleteQuestionButton;
         private Label welcomeLabel;
+        private Button settingsButton;
+        private Button exitButton;
     }
 }

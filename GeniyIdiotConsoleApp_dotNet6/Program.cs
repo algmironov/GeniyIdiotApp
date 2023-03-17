@@ -18,6 +18,10 @@ namespace GeniyIdiotConsoleApp_dotNet6
 
             while(inMenu)
             {
+                
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                
+                DataDealer.PrepareFilesOnStart();
                 var menuIsAccepted = false;
                 Console.WriteLine("Добро пожаловать в игру Гений или идиот!\n1. Играть\n2. Смотреть результаты\n3. Добавить вопросы\n4. Удалить вопросы\n\nВведите номер пункта меню для продолжения:");
 
@@ -27,7 +31,15 @@ namespace GeniyIdiotConsoleApp_dotNet6
                     try
                     {
                         menuPoint = int.Parse(menuInput);
-                        menuIsAccepted = true;
+                        if (menuPoint < 1 || menuPoint > 4)
+                        {
+                            Console.WriteLine("Вы ввели неправильное число, повторите ввод!");
+                        }
+                        else
+                        {
+                            menuIsAccepted = true;
+                        }
+                        
                     }
                     catch (System.FormatException)
                     {
@@ -66,11 +78,7 @@ namespace GeniyIdiotConsoleApp_dotNet6
                 {
                     QuestionsStorage.DeleteQuestion();
                 }
-                else
-                {
-                    Console.WriteLine("Вы ввели неправильное число, повторите ввод!");
-                        //todo logic
-                 }
+                
             }
          }
 

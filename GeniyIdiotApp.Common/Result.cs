@@ -3,7 +3,6 @@
     [Serializable]
     public class Result
     {
-        public int Id { get; set; }
         public string Name { get; set; } = "Unknown";
         public int CorrectAnswersCount { get; set; } = 0;
         public string Diagnosis { get; set; } = "Unknown";
@@ -22,7 +21,17 @@
 
         public override string ToString()
         {
-            return $"{Name} || {CorrectAnswersCount} || {Diagnosis}";
+            return $"{Name},{CorrectAnswersCount} ,{Diagnosis}";
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null) return false;
+            if (GetType() != obj.GetType())
+                return false;
+            Result other = obj as Result;
+
+            return Name.Equals(other.Name) && CorrectAnswersCount == other.CorrectAnswersCount && Diagnosis.Equals(other.Diagnosis);
         }
     }
 }

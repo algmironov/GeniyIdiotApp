@@ -15,6 +15,7 @@ namespace GeniyIdiotWindowsApp
     public partial class resultsTable1 : Form
     {
         List<List<string>> results = ResultStorage.GetAllResults();
+        List<Result> allResults = ResultStorage.GetListOfResults();
         public resultsTable1()
         {
             InitializeComponent();
@@ -24,33 +25,63 @@ namespace GeniyIdiotWindowsApp
 
         private void CreateTable()
         {
-            //ListView listView1 = new ListView();
-            //listView1.View = View.Details;
-            //listView1.GridLines = true;
-            //listView1.Columns.Add("Имя", -2, HorizontalAlignment.Center).AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
-            //listView1.Columns.Add("Результат", -2, HorizontalAlignment.Center).AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
-            //listView1.Columns.Add("Диагноз", -2, HorizontalAlignment.Center).AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
-
-            //foreach (var item in results)
-            //{
-            //    listView1.Items.Add(new ListViewItem(new string[] { item[0], item[1], item[2] }));
-            //}
-
-            //this.Controls.Add(listView1);
-
-            List<string[]> data = new List<string[]>();
-            foreach (var item in results)
+            string[][] stringsrows = new string[results.Count][];
+            int i = 0;
+            if (results.Count > 0)
             {
-                data.Add(new string[] { item[0], item[1], item[2] });
+                foreach (List<string> s in results)
+                {
+                    dataGridView1.Rows.Add(new string[] { s[0], s[1], s[2] });
+                }
 
             }
-            foreach (string[] s in data)
-                dataGridView1.Rows.Add(s);
+
+
+            dataGridView1.Show();
         }
 
         private void backButton_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void очиститьТаблицуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult res = MessageBox.Show("Вы уверены, что хотите удалить все результаты?", "Все результаты будут удалены", MessageBoxButtons.OKCancel);
+            if (res == DialogResult.OK)
+            {
+                ResultStorage.ClearResults();
+                results = ResultStorage.GetAllResults();
+                CreateTable();
+            }
+
+
+        }
+
+        private void removeLine_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Вы уверены, что хотите удалить запись?", "Удаление записи", MessageBoxButtons.OKCancel);
+            int index = 0;
+            if (dialogResult == DialogResult.OK)
+            {
+                index = dataGridView1.CurrentRow.Index;
+                dataGridView1.Rows.RemoveAt(index);
+            }
+            Result resultToRemove = allResults[index];
+            ResultStorage.RemoveChoosenResult(resultToRemove);
+            allResults = ResultStorage.GetListOfResults();
+            dataGridView1.Update();
+
+        }
+
+        private void вернутьсяВГлавноеМенюToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void выйтиИзПриложенияToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

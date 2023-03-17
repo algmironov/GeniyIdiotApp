@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace GeniyIdiotApp.Common
@@ -11,21 +12,28 @@ namespace GeniyIdiotApp.Common
     {
         static HashSet<Question> questions = new HashSet<Question>();
         static Dictionary<int, Question> questionsList = new Dictionary<int, Question>();
-        static string filename = $@"{Directory.GetCurrentDirectory()}/resources/questions.txt";
+        static string filename = $@"{Directory.GetCurrentDirectory()}/resources/questions.json";
 
         public static void addQuestion(Question question)
         {
             questions.Add(question);
-            _ = DataDealer.SaveData(filename, question.Text + "#" + question.Answer);
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            var questionsJson = DataDealer.GetDataFromJson(filename);
+            var questionsList = JsonSerializer.Deserialize<List<Question>>(questionsJson);
+            questionsList.Add(question);
+            questionsJson = JsonSerializer.Serialize(questionsList, options);
+            _ = DataDealer.SaveData(filename, questionsJson);
         }
 
-        public static void removeQuestion(Question question)
+        public static void RemoveQuestion(Question question)
         {
-            if(DataDealer.RemoveData(filename, question.Text + "#" + question.Answer))
-            {
-                questions.Remove(question);
-            }
-   
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            var questionsJson = DataDealer.GetDataFromJson(filename);
+            var questionsList = JsonSerializer.Deserialize<List<Question>>(questionsJson);
+            questionsList.Remove(question);
+            questions.Remove(question);
+            questionsJson = JsonSerializer.Serialize(questionsList, options);
+            DataDealer.SaveData(filename, questionsJson);
         }
 
         public static HashSet<Question> getQuestions()
@@ -36,12 +44,12 @@ namespace GeniyIdiotApp.Common
 
         private static void LoadQuestionsList()
         {
-            string query = DataDealer.GetData(filename);
-            var allQuestions = query.Split("||", StringSplitOptions.RemoveEmptyEntries).ToList();
+            questions.Clear();
+            string query = DataDealer.GetDataFromJson(filename);
+            var allQuestions =JsonSerializer.Deserialize<List<Question>>(query);
             foreach (var question in allQuestions)
             {
-                var questionAndAnswer = question.Split("#");
-                questions.Add(new Question(questionAndAnswer[0], int.Parse(questionAndAnswer[1])));
+                questions.Add(question);
             }
         }
 
@@ -87,11 +95,6 @@ namespace GeniyIdiotApp.Common
 
         }
 
-        public static void RemoveQuestion(Question question)
-        {
-            DataDealer.RemoveData(filename, $"{question.Text}#{question.Answer}");
-        }
-
         public static void DeleteQuestion()
         {
             var deletingQuestion = true;
@@ -105,7 +108,7 @@ namespace GeniyIdiotApp.Common
                 {
                     int questionPosition = int.Parse(Console.ReadLine());
                     Question questionToDelete = questionsList.GetValueOrDefault(questionPosition);
-                    removeQuestion(questionToDelete);
+                    RemoveQuestion(questionToDelete);
                     questionsList.Clear();
                     questions.Clear();
                 }
@@ -162,21 +165,21 @@ namespace GeniyIdiotApp.Common
             }
         }
 
-        internal static List<string> FirstCall()
+        internal static List<Question> FirstCall()
         {
-            List<string> questions = new List<string>();
-            questions.Add("Сколько будет два плюс два умноженное на два?#6");
-            questions.Add("Бревно нужно распилить на 10 частей. Сколько распилов нужно сделать?#9");
-            questions.Add("На двух руках 10 пальцев. Сколько пальцев на 5 руках?#25");
-            questions.Add("Укол делают каждые полчаса. Сколько нужно минут, чтобы сделать три укола?#60");
-            questions.Add("Пять свечей горело, две потухли. Сколько свечей осталось?#2");
-            questions.Add("Сколько башен в Московском Кремле?#20");
-            questions.Add("Сколько в одном байте бит?#8");
-            questions.Add("Сколько в одном Терабайте Гигабайт?#1024");
-            questions.Add("В каком году Ю. А. Гагарин впервые полетел в Космос?#1961");
-            questions.Add("Сколько колес в легковом автомобиле?#6");
-            questions.Add("Сколько в одном килограмме грамм?#1000");
-            return questions;
+            return new List<Question> { 
+            new Question("Сколько будет два плюс два умноженное на два?", 6),
+            new Question("Бревно нужно распилить на 10 частей. Сколько распилов нужно сделать?", 9),
+            new Question("На двух руках 10 пальцев. Сколько пальцев на 5 руках?", 25),
+            new Question("Укол делают каждые полчаса. Сколько нужно минут, чтобы сделать три укола?", 60),
+            new Question("Пять свечей горело, две потухли. Сколько свечей осталось?", 2),
+            new Question("Сколько башен в Московском Кремле?", 20),
+            new Question("Сколько в одном байте бит?" , 8),
+            new Question("Сколько в одном Терабайте Гигабайт?", 1024),
+            new Question("В каком году Ю. А. Гагарин впервые полетел в Космос?", 1961),
+            new Question("Сколько колес в легковом автомобиле?", 6),
+            new Question("Сколько в одном килограмме грамм?", 1000)
+            };  
         }
     }
 }
