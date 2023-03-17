@@ -20,9 +20,18 @@ namespace GeniyIdiotWindowsApp
         private void StartGameButton_Click(object sender, EventArgs e)
         {
             PlayGameForm f2 = new PlayGameForm();
-            this.Hide();
-            f2.ShowDialog();
-            this.Show();
+            if(PlayGameForm.IsNameEntered)
+            {
+                this.Hide();
+                f2.ShowDialog();
+                this.Show();
+            }
+            else
+            {
+                f2.Close();
+                PlayGameForm.IsNameEntered = true;
+            }
+            
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -60,6 +69,14 @@ namespace GeniyIdiotWindowsApp
             DeleteQuestionsForm deleteQuestionsForm = new DeleteQuestionsForm();
             this.Hide();
             deleteQuestionsForm.ShowDialog();
+            this.Show();
+        }
+
+        private void settingsButton_Click(object sender, EventArgs e)
+        {
+            SettingsForm settingsForm = new SettingsForm();
+            this.Hide();
+            settingsForm.ShowDialog();
             this.Show();
         }
     }

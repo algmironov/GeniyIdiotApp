@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace GeniyIdiotApp.Common
@@ -10,7 +11,7 @@ namespace GeniyIdiotApp.Common
     public class DiagnosisStorage
     {
         public static HashSet<Diagnosis> diagnoses= new HashSet<Diagnosis>();
-        static string filename = $@"{ Directory.GetCurrentDirectory()}/resources/diagnoses.txt"; 
+        static string filename = $@"{ Directory.GetCurrentDirectory()}/resources/diagnoses.json"; 
         
 
         public static void AddDiagnosis(Diagnosis diagnosis)
@@ -32,28 +33,25 @@ namespace GeniyIdiotApp.Common
             return "";
         }
 
-        internal static List<string> FirstCall()
+        internal static List<Diagnosis> FirstCall()
         {
-            List<string> diagnoses = new List<string>();
-            diagnoses.Add("Кретин, 0, 17");
-            diagnoses.Add("Идиот,16,33");
-            diagnoses.Add("Дурак,32,64");
-            diagnoses.Add("Нормальный,63,79");
-            diagnoses.Add("Талант,78,95");
-            diagnoses.Add("Гений,94,101");
-           return diagnoses;
-            
+            List<Diagnosis> diagnosis = new List<Diagnosis> 
+            { 
+            new Diagnosis("Кретин", -1, 17),
+            new Diagnosis("Идиот", 16, 33),
+            new Diagnosis("Дурак", 32, 64),
+            new Diagnosis("Нормальынй", 63, 79),
+            new Diagnosis("Талант", 78, 95),
+            new Diagnosis("Гений", 94, 101)
+            };
+            return diagnosis;
         }
 
         private static void LoadAllDiagnoses()
         {
-            string[] allDiagnoses = DataDealer.GetData(filename).Split("||", StringSplitOptions.RemoveEmptyEntries);
-            foreach (var str in allDiagnoses)
-            {
-                string[] diag = str.Split(",");
-                Diagnosis diagnosis = new Diagnosis(diag[0], int.Parse(diag[1]), int.Parse(diag[2]));
-                diagnoses.Add(diagnosis);
-            }
+            var allDiagnoses = DataDealer.GetDataFromJson(filename);
+            List<Diagnosis> diagnosesList = JsonSerializer.Deserialize<List<Diagnosis>>(allDiagnoses);
+            diagnoses = diagnosesList.ToHashSet();
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace GeniyIdiotApp.Common
 {
+    [Serializable]
     public class Question
     {
         public string Text { get; set; }

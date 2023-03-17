@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace GeniyIdiotApp.Common
 {
     public class DataDealer
     {
+
         public static bool SaveData(string filename, string data)
         {
             if (File.Exists(filename))
             {
-                StreamWriter writer = new StreamWriter(filename, true, Encoding.UTF8);
+                StreamWriter writer = new StreamWriter(filename, false, Encoding.UTF8);
                 writer.WriteLine(data);
                 writer.Close();
                 return true;
@@ -27,6 +29,33 @@ namespace GeniyIdiotApp.Common
             }
 
         }
+
+        public static string GetDataFromJson(string filename)
+        {
+            if (File.Exists(filename))
+            {
+                StringBuilder sb = new StringBuilder();
+                try
+                {
+                    StreamReader reader = new StreamReader(filename, Encoding.UTF8);
+                    while (!reader.EndOfStream)
+                    {
+                        sb.Append(reader.ReadLine());
+                    }
+                    reader.Close();
+                }
+                catch (IOException)
+                {
+                    return string.Empty;
+                }
+                return sb.ToString();
+            }
+            return string.Empty;
+        }
+            
+            
+        
+        
 
         public static string GetData(string filename)
         {
@@ -76,40 +105,34 @@ namespace GeniyIdiotApp.Common
             }
         }
 
-        public static async void PrepareFilesOnStart()
+        public static void PrepareFilesOnStart()
         {
             string resources = $@"{ Directory.GetCurrentDirectory()}/resources";
             if (!Directory.Exists(resources))
             {
                 Directory.CreateDirectory(resources);
             }
-            
-            string diagnoses = $@"{resources}\diagnoses.txt";
-            string questions = $@"{resources}\questions.txt";
-            string results = $@"{resources}\results.txt";
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string diagnoses = $@"{resources}\diagnoses.json";
+            string questions = $@"{resources}\questions.json";
+            string results = $@"{resources}\results.json";
             if (!File.Exists(diagnoses))
             {
                 File.Create(diagnoses).Close();
-                foreach (var diagnose in DiagnosisStorage.FirstCall())
-                {
-                    SaveData(diagnoses, diagnose);
-                }
+                
+                var daignosesList = JsonSerializer.Serialize(DiagnosisStorage.FirstCall(), options);
+                SaveData(diagnoses, daignosesList);
             }
             if (!File.Exists(questions))
             {
                 File.Create(questions).Close();
-               foreach (var q in QuestionsStorage.FirstCall())
-                    {
-                        SaveData(questions, q);
-                    }
+                var questionsList = JsonSerializer.Serialize(QuestionsStorage.FirstCall(), options);
+                SaveData(questions, questionsList);
             }
             if (!File.Exists(results))
                 {
                     File.Create(results).Close();
                 }
         }
-
-
-
     }
 }

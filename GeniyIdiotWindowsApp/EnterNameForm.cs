@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -16,6 +17,7 @@ namespace GeniyIdiotWindowsApp
         public EnterNameForm()
         {
             InitializeComponent();
+            inputUsernameField.Select();
         }
 
         private void EnterNameForm_Load(object sender, EventArgs e)
@@ -25,18 +27,21 @@ namespace GeniyIdiotWindowsApp
 
         private void sendNameButton_Click(object sender, EventArgs e)
         {
-            Username = inputUsernameField.Text;
-            PlayGameForm.Username = Username;
-            this.Close();
-        }
+            Regex nameRegex = new Regex(@"^[a-zA-Z][a-zA-Z]*$");
 
-        private void EnterNameForm_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (IsInputKey(Keys.Enter))
+            bool valid = nameRegex.IsMatch(inputUsernameField.Text);
+            if (valid)
             {
-                sendNameButton_Click(sender, e);
+                Username = inputUsernameField.Text;
+                PlayGameForm.Username = Username;
+                this.Close();
             }
 
+        }
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            PlayGameForm.IsNameEntered = false;
+            this.Close();
         }
     }
 }

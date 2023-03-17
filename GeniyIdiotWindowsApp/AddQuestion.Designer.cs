@@ -80,8 +80,10 @@
             // 
             // answerTextBox
             // 
+            answerTextBox.BorderStyle = BorderStyle.FixedSingle;
             answerTextBox.Location = new Point(12, 254);
             answerTextBox.Name = "answerTextBox";
+            answerTextBox.PlaceholderText = "Введите число";
             answerTextBox.Size = new Size(183, 23);
             answerTextBox.TabIndex = 4;
             // 
@@ -129,6 +131,7 @@
             Controls.Add(clearButton);
             Controls.Add(exitButton);
             Controls.Add(questionTextBox);
+            Cursor = Cursors.IBeam;
             Name = "AddQuestion";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "AddQuestion";

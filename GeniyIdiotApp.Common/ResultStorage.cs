@@ -1,77 +1,80 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace GeniyIdiotApp.Common
 {
     public class ResultStorage
     {
-       static string filename = $@"{Directory.GetCurrentDirectory()}/resources/results.txt";
-        public static async void AddResult(Result result)
+        static string filename = $@"{Directory.GetCurrentDirectory()}/resources/results.json";
+
+        public static void AddResult(Result result)
         {
-            
-            string data = $"{result.Name},{result.CorrectAnswersCount},{result.Diagnosis};";
-            if (File.Exists(filename))
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            List<Result> resultList = GetListOfResults();
+            resultList.Add(result);
+            var data = JsonSerializer.Serialize<List<Result>>(resultList, options);
+            DataDealer.SaveData(filename, data);
+        }
+        
+        public static void PrintTableWithResults()
+        {
+            var results = GetListOfResults();
+            Console.WriteLine("{0, -10} {1, -15} {2, 7}", "Имя", "Верных ответов", "Диагноз");
+            foreach (var result in results)
             {
-                try
-                {
-                    await File.AppendAllTextAsync(filename, data);
-                }
-                catch (IOException)
-                {
-                    Console.WriteLine("Couldn't write your result to file");
-                }
+                Console.WriteLine("{0,-20} {1,-10} {2,-25}", result.Name, result.CorrectAnswersCount, result.Diagnosis);
+            }
+
+        }
+        public static List<Result> GetListOfResults()
+        {
+            var resultsString = DataDealer.GetDataFromJson(filename);
+            if (string.IsNullOrEmpty(resultsString))
+            {
+                return new List<Result>();
             }
             else
             {
-                File.Create(filename).Close();
+                var results = JsonSerializer.Deserialize<List<Result>>(resultsString);
+                return results;
             }
-        }
-        public static async void PrintTableWithResults()
-        {
-            string result = "";
-
-            try
-            {
-                result = await File.ReadAllTextAsync(filename);
-            }
-            catch (FileNotFoundException)
-            {
-                Console.WriteLine("There are no results");
-            }
-            string[] resultsArray = result.Split(";", StringSplitOptions.RemoveEmptyEntries);
-            int longestString = resultsArray.Max(x => x.Length);
-            foreach (var res in resultsArray)
-            {
-                string[] data = res.Split(",");
-                Result resultToPrint = new Result(data[0], int.Parse(data[1]), data[2]);
-                Console.WriteLine(resultToPrint.ToString());
-
-                Console.WriteLine(PrintTableLine(longestString));
-            }
-
+            
         }
 
         public static List<List<string>> GetAllResults()
         {
             List<string> preResults = new List<string>();
             List<List<string>> results = new List<List<string>>();
-             var resultsString = DataDealer.GetData(filename);
+             var resultsString = DataDealer.GetDataFromJson(filename);
             if (!string.IsNullOrEmpty(resultsString))
             {
-                preResults = resultsString.Remove(resultsString.Length - 2).Split(";", StringSplitOptions.RemoveEmptyEntries).ToList();
-                foreach (var res in preResults)
+                var resultsList = JsonSerializer.Deserialize<List<Result>>(resultsString);
+                
+                foreach (var res in resultsList)
                 {
-                    List<string> elem = res.Split(',').ToList();
+                    List<string> elem =new List<string> { res.Name, res.CorrectAnswersCount.ToString(), res.Diagnosis };
                     results.Add(elem);
                 }
+
                 return results;
             }
-            
             return results;
         }
+
+        public static void ClearResults()
+        {
+            File.WriteAllText(filename, string.Empty);
+        }
+
+        public static void RemoveChoosenResult(Result result)
+        {
+            var results = GetListOfResults().Where(x =>!x.Equals(result)).ToList();
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            var jsonString = JsonSerializer.Serialize<List<Result>>(results, options);
+            DataDealer.SaveData(filename, jsonString);
+        }
+
         static string PrintTableLine(int length)
         {
             int size = length + 8;
