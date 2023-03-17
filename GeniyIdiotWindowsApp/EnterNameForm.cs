@@ -27,16 +27,17 @@ namespace GeniyIdiotWindowsApp
 
         private void sendNameButton_Click(object sender, EventArgs e)
         {
-            Regex nameRegex = new Regex(@"^[a-zA-Z][a-zA-Z]*$");
-
-            bool valid = nameRegex.IsMatch(inputUsernameField.Text);
-            if (valid)
+            Username = inputUsernameField.Text;
+            if (string.IsNullOrEmpty(Username.Trim()))
             {
-                Username = inputUsernameField.Text;
+                MessageBox.Show("Имя не может быть пустым!");
+            }
+            else
+            {
                 PlayGameForm.Username = Username;
                 this.Close();
             }
-
+            
         }
         private void exitButton_Click(object sender, EventArgs e)
         {

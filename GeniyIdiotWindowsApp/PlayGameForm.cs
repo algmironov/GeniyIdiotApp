@@ -20,6 +20,7 @@ namespace GeniyIdiotWindowsApp
         public static bool IsNameEntered { get; set; } = true;
         private List<Question> questions = LoadQuestions();
         private List<string> answeredQuestions = new List<string>();
+        public static Dictionary<Question, string> wrongAnswers = new Dictionary<Question, string>();
         Result result = new Result();
         public static string Username { get; set; }
         private int questionNumber = 1;
@@ -63,13 +64,13 @@ namespace GeniyIdiotWindowsApp
         private static List<Question> LoadQuestions()
         {
             var questions = QuestionsStorage.getQuestions().ToList();
-            if (questions.Count < Properties.GameSettings.Default.inGameQuestionCount)
+            if (questions.Count > Properties.GameSettings.Default.inGameQuestionCount)
             {
-                var toRemoveFromList = Properties.GameSettings.Default.inGameQuestionCount - questions.Count;
+                var toRemoveFromList = questions.Count - Properties.GameSettings.Default.inGameQuestionCount;
                 Random random = new Random();
                 for (int i = 0; i < toRemoveFromList; i++)
                 {
-                    var index = random.Next(questions.Count - 1);
+                    var index = random.Next(questions.Count);
                     questions.RemoveAt(index);
                 }
                 return questions;
@@ -84,8 +85,13 @@ namespace GeniyIdiotWindowsApp
                 timer.Stop();
                 string diagnosis = DiagnosisStorage.GetDiagnosisByResult(result.CorrectAnswersCount, answeredQuestions.Count);
                 result.Diagnosis = diagnosis;
-                MessageBox.Show($"{result.Name}, Ваш диагноз: {result.Diagnosis}", "Игра завершена!");
+                DialogResult res = MessageBox.Show($"{result.Name}, Ваш диагноз: {result.Diagnosis}\nХотите посмотреть неправильные ответы,", "Игра завершена!", MessageBoxButtons.OKCancel);
                 ResultStorage.AddResult(result);
+                if (res == DialogResult.OK)
+                {
+                    showWrongAnswersForm wrongAnswersForm = new showWrongAnswersForm();
+                    wrongAnswersForm.ShowDialog();
+                }
                 this.Close();
             }
             else
@@ -98,6 +104,10 @@ namespace GeniyIdiotWindowsApp
                         if (question.Answer == int.Parse(answerInputTextBox.Text))
                         {
                             result.CorrectAnswersCount++;
+                        }
+                        else
+                        {
+                            wrongAnswers.Add(question, answerInputTextBox.Text);
                         }
                     }
                     catch (FormatException)

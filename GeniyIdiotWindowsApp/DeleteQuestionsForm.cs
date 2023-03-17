@@ -30,7 +30,6 @@ namespace GeniyIdiotWindowsApp
             questionsList.EndUpdate();
             questionsList.Show();
             questionsList.CheckOnClick = true;
-            //questionsList.SelectionMode = SelectionMode.MultiSimple;
         }
 
         private void removeButton_Click(object sender, EventArgs e)

@@ -32,11 +32,12 @@
             getResultsButton = new Button();
             welcomeLabel = new Label();
             settingsButton = new Button();
+            exitButton = new Button();
             SuspendLayout();
             // 
             // startGameButton
             // 
-            startGameButton.Location = new Point(224, 144);
+            startGameButton.Location = new Point(224, 167);
             startGameButton.Name = "startGameButton";
             startGameButton.Size = new Size(222, 23);
             startGameButton.TabIndex = 0;
@@ -60,13 +61,13 @@
             welcomeLabel.Font = new Font("Verdana", 18F, FontStyle.Bold, GraphicsUnit.Point);
             welcomeLabel.Location = new Point(39, 72);
             welcomeLabel.Name = "welcomeLabel";
-            welcomeLabel.Size = new Size(609, 29);
+            welcomeLabel.Size = new Size(637, 29);
             welcomeLabel.TabIndex = 4;
-            welcomeLabel.Text = "Добро пожаловать в игру Гений или Идиот";
+            welcomeLabel.Text = "Добро пожаловать в игру \"Гений или Идиот\"";
             // 
             // settingsButton
             // 
-            settingsButton.Location = new Point(224, 254);
+            settingsButton.Location = new Point(224, 225);
             settingsButton.Name = "settingsButton";
             settingsButton.Size = new Size(222, 23);
             settingsButton.TabIndex = 5;
@@ -74,18 +75,29 @@
             settingsButton.UseVisualStyleBackColor = true;
             settingsButton.Click += settingsButton_Click;
             // 
+            // exitButton
+            // 
+            exitButton.Location = new Point(224, 254);
+            exitButton.Name = "exitButton";
+            exitButton.Size = new Size(222, 23);
+            exitButton.TabIndex = 6;
+            exitButton.Text = "Выход";
+            exitButton.UseVisualStyleBackColor = true;
+            exitButton.Click += exitButton_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(696, 345);
+            Controls.Add(exitButton);
             Controls.Add(settingsButton);
             Controls.Add(welcomeLabel);
             Controls.Add(getResultsButton);
             Controls.Add(startGameButton);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Гений Идиот";
+            Text = "Гений или Идиот";
             FormClosed += MainForm_FormClosed;
             Load += Form1_Load;
             ResumeLayout(false);
@@ -98,5 +110,6 @@
         private Button getResultsButton;
         private Label welcomeLabel;
         private Button settingsButton;
+        private Button exitButton;
     }
 }

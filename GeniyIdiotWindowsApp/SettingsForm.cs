@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using GeniyIdiotApp.Common;
+
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace GeniyIdiotWindowsApp
@@ -63,7 +65,7 @@ namespace GeniyIdiotWindowsApp
                 {
                     MessageBox.Show("Не может быть меньше двух вопросов!");
                 }
-                else if (int.Parse(questionsCountTextBox.Text) > Properties.GameSettings.Default.inGameQuestionCount)
+                else if (int.Parse(questionsCountTextBox.Text) > QuestionsStorage.getQuestions().Count)
                 {
                     MessageBox.Show("Попробуйте ввести меньшее значение", "Слишком много вопросов!");
                 }
